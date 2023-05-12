@@ -1,12 +1,35 @@
 {
-  "extends": "../../tsconfig.json",
-  "exclude": [],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.mjs",
-    ".next/types/**/*.ts"
-  ]
+	"extends": "../../tsconfig.json",
+	"exclude": [],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", ".next/types/**/*.ts"],
+	"compilerOptions": {
+		"target": "es2017",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"noUncheckedIndexedAccess": true,
+
+		"baseUrl": ".",
+		"paths": {
+			// "assets/*": ["src/assets/*"],
+			"components/*": ["src/components/*"],
+			"env/*": ["src/env/*"],
+			"lib/*": ["src/lib/*"],
+			// "@redux/*": ["src/redux/*"],
+			// "server/*": ["src/server/*"],
+			// "shared/*": ["src/shared/*"],
+			// "types/*": ["src/types/*"],
+			"utils/*": ["src/utils/*"]
+		}
+	}
 }
