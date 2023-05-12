@@ -6,12 +6,144 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Post {
+model Event {
+    id          String   @id @default(cuid())
+    name        String
+    description String
+    startDate   DateTime
+    endDate     DateTime
+    location    String
+    address     String
+    city        String
+    state       String
+    zip         String
+    hotels      Hotel[]
+}
+
+model Hotel {
     id      String @id @default(cuid())
-    title   String
-    content String
+    name    String
+    address String
+    city    String
+    state   String
+    zip     String
+
+    rooms   Room[]
+    event   Event  @relation(fields: [eventId], references: [id])
+    eventId String
+}
+
+model Room {
+    id          String @id @default(cuid())
+    name        String
+    description String
+    capacity    Int
+
+    hotel        Hotel          @relation(fields: [hotelId], references: [id])
+    hotelId      String
+    availability Availability[]
+    panels       Panel[]
+}
+
+// Programming
+model Availability {
+    id    String   @id @default(cuid())
+    date  DateTime
+    start DateTime
+    end   DateTime
+
+    room         Room?       @relation(fields: [roomId], references: [id])
+    roomId       String?
+    vendorHall   VendorHall? @relation(fields: [vendorHallId], references: [id])
+    vendorHallId String?
+}
+
+model Panel {
+    id            String   @id @default(cuid())
+    name          String
+    description   String
+    start         DateTime
+    end           DateTime
+    eightteenPlus Boolean  @default(false)
+    approved      Boolean  @default(false)
+    denied        Boolean  @default(false)
+
+    group   Group    @relation(fields: [groupId], references: [id])
+    groupId String
+    tag     Tag      @relation(fields: [tagId], references: [id])
+    tagId   String
+    rooms   Room?    @relation(fields: [roomId], references: [id])
+    roomId  String?
+    note    Note[]
+    members Member[]
+}
+
+model Tag {
+    id   String @id @default(cuid())
+    name String
+
+    panel Panel[]
+}
+
+model Group {
+    id          String  @id @default(cuid())
+    name        String
+    description String
+    apprvoved   Boolean @default(false)
+
+    panels  Panel[]
+    members Member[]
+    notes   Note[]
+}
+
+model Note {
+    id        String   @id @default(cuid())
+    userId    String
+    note      String
+    timestamp DateTime @default(now())
+
+    panel   Panel?  @relation(fields: [panelId], references: [id])
+    panelId String?
+    group   Group?  @relation(fields: [groupId], references: [id])
+    groupId String?
+}
+
+model Member {
+    id      String  @id @default(cuid())
+    userId  String
+    group   Group   @relation(fields: [groupId], references: [id])
+    groupId String
+    active  Boolean @default(true)
+    panel   Panel?  @relation(fields: [panelId], references: [id])
+    panelId String?
+}
+
+// Vendor Hall
+model VendorHall {
+    id          String @id @default(cuid())
+    name        String
+    description String
+    totalSlots  Int
+
+    vendors     Vendor[]
+    avilability Availability[]
+}
+
+model Vendor {
+    id          String  @id @default(cuid())
+    name        String
+    description String
+    address     String
+    phone       String
+    email       String
+    website     String
+    slotNumber  Int
+    artist      Boolean @default(false)
+
+    vendorHall   VendorHall? @relation(fields: [vendorHallId], references: [id])
+    vendorHallId String?
 }

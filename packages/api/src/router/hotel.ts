@@ -7,6 +7,7 @@ const hotelCreate = z.object({
   city: z.string(),
   state: z.string(),
   zip: z.string(),
+  eventId: z.string(),
 })
 
 const hotelUpdate = z.object({

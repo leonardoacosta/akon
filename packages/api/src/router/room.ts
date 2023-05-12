@@ -13,9 +13,13 @@ const roomUpdate = z.object({
   room: roomCreate,
 })
 
+const roomGet = z.object({
+  hotelId: z.string(),
+})
+
 export const roomRouter = router({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.room.findMany();
+  all: publicProcedure.input(roomGet).query(({ ctx, input }) => {
+    return ctx.prisma.room.findMany({ where: { hotelId: input.hotelId } });
   }),
   byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.room.findFirst({ where: { id: input } });

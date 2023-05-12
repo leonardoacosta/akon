@@ -3,8 +3,8 @@ import { z } from "zod";
 
 const availabilityCreate = z.object({
     date: z.string(),
-    startTime: z.string(),
-    endTime: z.string(),
+    start: z.string(),
+    end: z.string(),
 
 
     roomID: z.string(),
