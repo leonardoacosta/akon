@@ -1,14 +1,18 @@
 import { trpc } from 'utils/trpc';
 import { DataTable } from 'components/ui/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Hotel } from '@acme/db';
+import { Room } from '@acme/db';
 import Button from 'components/ui/Button';
 import { ArrowBigRightDash } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-export const HotelList = () => {
-	const { data } = trpc.events.getCurrent.useQuery();
-	const columns: ColumnDef<Hotel>[] = [
+export const RoomList = () => {
+	const { query } = useRouter();
+	const id = query.props ? query.props[0] : null;
+	const { data } = trpc.hotels.byId.useQuery(id as string, { enabled: !!id });
+
+	const columns: ColumnDef<Room>[] = [
 		{
 			accessorKey: 'name',
 			header: 'Name'
@@ -16,12 +20,11 @@ export const HotelList = () => {
 		{
 			id: 'actions',
 			cell: ({ row }) => {
-				const hotel = row.original;
+				const room = row.original;
 
 				return (
-					<Link href={`/hotels/${hotel.id}`}>
+					<Link href={`/room/${room.id}`}>
 						<Button secondary>
-							<span className='sr-only'>Open menu</span>
 							<ArrowBigRightDash className='h-4 w-4' />
 						</Button>
 					</Link>
@@ -29,7 +32,7 @@ export const HotelList = () => {
 			}
 		}
 	];
-	return <DataTable columns={columns} data={data?.hotels ?? []} noneMessage='No conference centers yet' />;
+	return <DataTable columns={columns} data={data?.rooms ?? []} noneMessage='No conference centers yet' />;
 };
 
-export default HotelList;
+export default RoomList;

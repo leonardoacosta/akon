@@ -57,7 +57,7 @@ export function DataTable<TData, TValue>({ columns, data, noneMessage }: DataTab
 	});
 
 	return (
-		<div className='w-full'>
+		<div className='w-full '>
 			<div className='flex items-center py-2'>
 				{/* <TextInput
 					placeholder='Filter emails...'
@@ -90,14 +90,14 @@ export function DataTable<TData, TValue>({ columns, data, noneMessage }: DataTab
 					</DropdownMenuContent>
 				</DropdownMenu>*/}
 			</div>
-			<div className='rounded-md border'>
+			<div className='rounded-md border  p-6'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => {
 									return (
-										<TableHead key={header.id}>
+										<TableHead className='text-gray-300' key={header.id}>
 											{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 										</TableHead>
 									);
@@ -110,7 +110,9 @@ export function DataTable<TData, TValue>({ columns, data, noneMessage }: DataTab
 							table.getRowModel().rows.map((row) => (
 								<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
 									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+										<TableCell className='text-gray-300' key={cell.id}>
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+										</TableCell>
 									))}
 								</TableRow>
 							))

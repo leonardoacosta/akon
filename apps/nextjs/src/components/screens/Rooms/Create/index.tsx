@@ -13,7 +13,7 @@ export const CreateRoom = () => {
 	const [open, setOpen] = useState(false);
 
 	const { mutate } = trpc.room.create.useMutation();
-	const { data, refetch } = trpc.hotels.byId.useQuery(id as string, { enabled: !!id });
+	const { refetch } = trpc.hotels.byId.useQuery(id as string, { enabled: !!id });
 
 	const newEvent: Room = {
 		id: '',
@@ -25,9 +25,9 @@ export const CreateRoom = () => {
 
 	return (
 		<Modal
-			buttonLabel='Add Conference Center'
-			modalTitle='New Conference Center'
-			modalDescription='These will hold the rooms that will be available for panels and events.'
+			buttonLabel='Add Room'
+			modalTitle='New Room'
+			modalDescription='These will help manage room availability for panels and events.'
 			open={open}
 			setOpen={setOpen}
 		>
@@ -41,7 +41,6 @@ export const CreateRoom = () => {
 					values.hotelId = id as string;
 					mutate(values, {
 						onSuccess: () => {
-							console.log('success');
 							setOpen(false);
 							refetch();
 						}

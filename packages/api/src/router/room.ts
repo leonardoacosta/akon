@@ -19,7 +19,7 @@ const roomGet = z.object({
 
 export const roomRouter = router({
   all: publicProcedure.input(roomGet).query(({ ctx, input }) => {
-    return ctx.prisma.room.findMany({ where: { hotelId: input.hotelId } });
+    return ctx.prisma.room.findMany({ where: { hotelId: input.hotelId }, include: { availability: true } });
   }),
   byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.prisma.room.findFirst({ where: { id: input } });

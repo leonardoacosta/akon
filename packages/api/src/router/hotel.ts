@@ -20,7 +20,7 @@ export const hotelRouter = router({
     return ctx.prisma.hotel.findMany();
   }),
   byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.hotel.findFirst({ where: { id: input } });
+    return ctx.prisma.hotel.findFirst({ where: { id: input }, include: { rooms: true } });
   }),
   create: protectedProcedure
     .input(hotelCreate)

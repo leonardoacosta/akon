@@ -13,7 +13,7 @@ export const TextInput = ({ name, label, placeholder, type }: TextInputProps) =>
 	);
 	return (
 		<fieldset className='mb-[15px] flex items-center gap-5'>
-			<label className='w-[90px] text-right text-[15px] text-gray-900' htmlFor={name}>
+			<label className='w-[90px] text-right text-[15px] text-gray-300' htmlFor={name}>
 				{label}
 			</label>
 			<Field className={className} id={name} value={values[name]} name={name} placeholder={placeholder} type={type} />
