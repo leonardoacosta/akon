@@ -8,6 +8,7 @@ import Button from '../../../ui/Button';
 
 export const CreateEvent = () => {
 	const [open, setOpen] = useState(false);
+	const { data, refetch } = trpc.events.getCurrent.useQuery();
 	const { mutate } = trpc.events.create.useMutation();
 
 	const newEvent: Event = {
@@ -38,19 +39,17 @@ export const CreateEvent = () => {
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					setTimeout(() => {
-						mutate(values, {
-							onSuccess: () => {
-								console.log('success');
-								setOpen(false);
-								// close modal
-							}
-						});
-						setSubmitting(false);
-					}, 400);
+					mutate(values, {
+						onSuccess: () => {
+							refetch();
+							setOpen(false);
+							// close modal
+						}
+					});
+					setSubmitting(false);
 				}}
 			>
-				{({ dirty, isValid }) => (
+				{({ dirty, isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
@@ -63,7 +62,7 @@ export const CreateEvent = () => {
 						<TextInput name='zip' label='zip' />
 
 						<div className='mt-[25px] flex justify-end'>
-							<Button onClick={() => setOpen(true)} disabled={!isValid}>
+							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
 								Create Event
 							</Button>
 						</div>

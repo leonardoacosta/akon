@@ -47,13 +47,13 @@ export const CreateRoom = () => {
 					});
 				}}
 			>
-				{({ dirty, isValid }) => (
+				{({ dirty, isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
 						<TextInput name='capacity' label='Capacity' type='number' />
 						<div className='mt-[25px] flex justify-end'>
-							<Button onClick={() => setOpen(true)} disabled={!isValid}>
+							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
 								Create Room
 							</Button>
 						</div>

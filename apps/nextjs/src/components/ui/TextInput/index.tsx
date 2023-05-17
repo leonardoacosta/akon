@@ -1,9 +1,14 @@
 import clsx from 'clsx';
 import { Field, useFormikContext } from 'formik';
+import { formatDate, formatInputTime } from 'lib/utils';
 
 export const TextInput = ({ name, label, placeholder, type }: TextInputProps) => {
 	const { values, errors, touched, setFieldValue } = useFormikContext<any>();
 	const error = !!touched[name] && !values[name] ? (errors[name] as string) ?? 'Required' : '';
+
+	if (type === 'time') console.log(name, values[name]);
+
+	// const value = type === 'date' ? formatDate(values[name]) : values[name];
 	const className = clsx(
 		error && 'bg-rose-50  shadow-rose-400',
 		`inline-flex h-[35px] w-full flex-1 items-center justify-center rounded-[4px]

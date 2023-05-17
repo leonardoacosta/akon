@@ -5,7 +5,6 @@ import CreateEvent from '../../components/screens/Events/Create';
 import CreateHotel from '../../components/screens/Hotels/Create';
 import HotelList from 'components/screens/Hotels/List';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/Card';
-import { Car } from 'lucide-react';
 
 export const Home = () => {
 	const { data } = trpc.events.getCurrent.useQuery();

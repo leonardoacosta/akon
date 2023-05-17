@@ -46,7 +46,7 @@ export const CreateHotel = () => {
 					});
 				}}
 			>
-				{({ dirty, isValid }) => (
+				{({ dirty, isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='location' label='location' />
@@ -56,7 +56,7 @@ export const CreateHotel = () => {
 						<TextInput name='zip' label='zip' />
 
 						<div className='mt-[25px] flex justify-end'>
-							<Button onClick={() => setOpen(true)} disabled={!isValid}>
+							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
 								Create Conference Center
 							</Button>
 						</div>

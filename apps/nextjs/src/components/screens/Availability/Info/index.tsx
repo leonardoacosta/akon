@@ -2,24 +2,25 @@ import Button from 'components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/Card';
 import { TextInput } from 'components/ui/TextInput';
 import { Form, Formik } from 'formik';
+import { formatDayOfWeek } from 'lib/utils';
 import { useRouter } from 'next/router';
 import { trpc } from 'utils/trpc';
 
-export const RoomInfo = () => {
-	const { query } = useRouter();
+export const AvailabilityInfo = () => {
+	const { query, back } = useRouter();
 	const id = query.props ? query.props[0] : null;
-	const { data, refetch } = trpc.room.byId.useQuery(id as string, { enabled: !!id });
-	const { mutate } = trpc.room.update.useMutation();
+	const { data, refetch } = trpc.availability.byId.useQuery(id as string, { enabled: !!id });
+	const { mutate } = trpc.availability.update.useMutation();
 
 	if (!data) return null;
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>
-					<h1 className='text-2xl font-bold text-gray-300'>{data?.name}</h1>
+					<h1 className='text-2xl font-bold text-gray-300'>{formatDayOfWeek(data?.startTime)}</h1>
 				</CardTitle>
 				<CardDescription>
-					<p className='text-gray-300'>{data?.description}</p>
+					<p className='text-gray-300'>{formatDayOfWeek(data?.startTime)}</p>
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
@@ -28,12 +29,13 @@ export const RoomInfo = () => {
 					onSubmit={async (values) => {
 						mutate(
 							{
-								room: values,
+								availability: values,
 								id: data.id
 							},
 							{
 								onSuccess: () => {
 									refetch();
+									back();
 								}
 							}
 						);
@@ -41,9 +43,9 @@ export const RoomInfo = () => {
 				>
 					{({ values, handleChange, handleBlur, handleSubmit, isValid, isSubmitting }) => (
 						<Form onSubmit={handleSubmit}>
-							<TextInput name='name' label='Name' />
-							<TextInput name='description' label='Description' />
-							<TextInput name='capacity' label='Capacity' type='number' />
+							<TextInput name='date' label='Date' type='date' />
+							<TextInput name='start' label='Start' type='time' />
+							<TextInput name='end' label='End' type='time' />
 							<div className='mt-[25px] flex justify-end'>
 								<Button disabled={!isValid || isSubmitting} loading={isSubmitting}>
 									Save
@@ -57,4 +59,4 @@ export const RoomInfo = () => {
 	);
 };
 
-export default RoomInfo;
+export default AvailabilityInfo;

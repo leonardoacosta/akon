@@ -51,10 +51,9 @@ model Room {
 
 // Programming
 model Availability {
-    id    String   @id @default(cuid())
-    date  DateTime
-    start DateTime
-    end   DateTime
+    id        String @id @default(cuid())
+    startTime String
+    endTime   String
 
     room         Room?       @relation(fields: [roomId], references: [id])
     roomId       String?

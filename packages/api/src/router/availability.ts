@@ -1,14 +1,13 @@
+import { TRPCError } from "@trpc/server";
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 const availabilityCreate = z.object({
-    date: z.string(),
-    start: z.string(),
-    end: z.string(),
+    startTime: z.string(),
+    endTime: z.string(),
 
-
-    roomID: z.string(),
-    vendorHallID: z.string(),
+    roomId: z.string().nullable(),
+    vendorHallId: z.string().nullable(),
 })
 
 const availabilityUpdate = z.object({
@@ -16,16 +15,27 @@ const availabilityUpdate = z.object({
     availability: availabilityCreate,
 })
 
+const getAvailability = z.object({
+    roomId: z.string().optional(),
+    vendorHallId: z.string().optional(),
+})
+
 export const availabilityRouter = router({
-    all: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.availability.findMany();
+    all: publicProcedure.input(getAvailability).query(({ ctx, input }) => {
+        return ctx.prisma.availability.findMany({ where: { OR: { roomId: input.roomId, vendorHallId: input.vendorHallId } } });
     }),
     byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
         return ctx.prisma.availability.findFirst({ where: { id: input } });
     }),
     create: protectedProcedure
         .input(availabilityCreate)
-        .mutation(({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
+            // Check if there is already an availability for this date
+            const test = await ctx.prisma.availability.findFirst({ where: { startTime: input.startTime, OR: { roomId: input.roomId, vendorHallId: input.vendorHallId } } });
+            console.log(test);
+            if (test) throw new TRPCError({ code: "BAD_REQUEST", message: "Availability already exists for this date" });
+
+
             return ctx.prisma.availability.create({ data: input });
         }),
     update: protectedProcedure
