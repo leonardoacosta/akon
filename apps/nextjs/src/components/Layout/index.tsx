@@ -1,12 +1,13 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { UserButton } from '@clerk/nextjs';
+import { RedirectToSignIn, SignedOut, UserButton, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 
 const navigation = [
 	{ name: 'Dashboard', href: '#', current: true },
@@ -24,10 +25,18 @@ const teams = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
-	const queryClient = useQueryClient();
+	const [redirect, setRedirect] = useState('');
+	const { pathname } = useRouter();
+
+	useEffect(() => {
+		setRedirect(pathname);
+	}, [pathname]);
 
 	return (
 		<>
+			<SignedOut>
+				<RedirectToSignIn afterSignInUrl={redirect} />
+			</SignedOut>
 			<div className='bg bg-slate-900'>
 				{/* Sidebar for Mobile */}
 				<Popover.Root>

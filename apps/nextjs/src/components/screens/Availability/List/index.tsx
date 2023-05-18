@@ -1,11 +1,12 @@
 import { trpc } from 'utils/trpc';
 import { DataTable } from 'components/ui/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Availability, Room } from '@acme/db';
+import { Availability } from '@acme/db';
 import Button from 'components/ui/Button';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { formatDayOfWeek, formatTime } from 'lib/utils';
 
 export const AvailabilityList = () => {
 	const { query, pathname } = useRouter();
@@ -22,17 +23,17 @@ export const AvailabilityList = () => {
 		{
 			accessorKey: 'startTime',
 			header: 'Day',
-			cell: ({ getValue }) => getValue() //formatDayOfWeek(getValue() as string)
+			cell: ({ getValue }) => formatDayOfWeek(getValue() as string)
 		},
 		{
 			accessorKey: 'startTime',
 			header: 'Start',
-			cell: ({ getValue }) => getValue() //formatDayOfWeek(getValue() as string)
+			cell: ({ getValue }) => formatTime(getValue() as string)
 		},
 		{
 			accessorKey: 'endTime',
 			header: 'End',
-			cell: ({ getValue }) => getValue() //formatDayOfWeek(getValue() as string)
+			cell: ({ getValue }) => formatTime(getValue() as string)
 		},
 		{
 			id: 'actions',

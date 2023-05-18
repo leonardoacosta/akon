@@ -12,6 +12,13 @@ export const CreateAvailability = () => {
 	const id = query.props ? query.props[0] : null;
 	const [open, setOpen] = useState(false);
 	const { mutate } = trpc.availability.create.useMutation();
+	const { refetch } = trpc.availability.all.useQuery(
+		{
+			roomId: pathname.includes('room') ? (id as string) : undefined,
+			vendorHallId: pathname.includes('vendor-hall') ? (id as string) : undefined
+		},
+		{ enabled: !!id }
+	);
 
 	const newAvailability: Availability = {
 		id: '',
@@ -42,6 +49,7 @@ export const CreateAvailability = () => {
 					onSubmit={(values, { setSubmitting }) => {
 						mutate(values, {
 							onSuccess: () => {
+								refetch();
 								setOpen(false);
 							},
 							onError: (error) => {
@@ -51,7 +59,7 @@ export const CreateAvailability = () => {
 						setSubmitting(false);
 					}}
 				>
-					{({ dirty, isValid, isSubmitting }) => (
+					{({ isValid, isSubmitting }) => (
 						<Form>
 							<TextInput name='startTime' label='Start Time' type='datetime-local' />
 							<TextInput name='endTime' label='End Time' type='datetime-local' />
