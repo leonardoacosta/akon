@@ -1,14 +1,13 @@
 import { trpc } from 'utils/trpc';
 import { DataTable } from 'components/ui/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Group, GroupTag } from '@acme/db';
+import { Group, Group_Tag } from '@acme/db';
 import Button from 'components/ui/Button';
 import { ArrowBigRightDash } from 'lucide-react';
 import Link from 'next/link';
 
 export const GroupList = () => {
 	const { data: allGroups } = trpc.groups.all.useQuery(undefined);
-
 	const columns: ColumnDef<Group>[] = [
 		{
 			accessorKey: 'name',
@@ -23,7 +22,7 @@ export const GroupList = () => {
 			accessorKey: 'tags',
 			header: 'Tags',
 			cell: ({ getValue }) => {
-				const tags = getValue() as GroupTag[];
+				const tags = getValue() as Group_Tag[];
 				console.log(tags);
 
 				return <span>{false ? 'Approved' : 'Denied'}</span>;
@@ -34,7 +33,7 @@ export const GroupList = () => {
 			cell: ({ row }) => {
 				const hotel = row.original;
 				return (
-					<Link href={`/Guests/${hotel.id}`}>
+					<Link href={`/guests/${hotel.id}`}>
 						<Button secondary>
 							<span className='sr-only'>Open menu</span>
 							<ArrowBigRightDash className='h-4 w-4' />
@@ -44,7 +43,7 @@ export const GroupList = () => {
 			}
 		}
 	];
-	return <DataTable columns={columns} data={allGroups ?? []} noneMessage='No panels to review' />;
+	return <DataTable columns={columns} data={allGroups ?? []} noneMessage='No groups to review' />;
 };
 
 export default GroupList;

@@ -8,14 +8,6 @@ import { RedirectToSignIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const navigation = [
-	{ name: 'Dashboard', href: '/home', current: true },
-	{ name: 'Guests', href: '/guests', current: false },
-	{ name: 'Programming', href: '/programming', current: false },
-	{ name: 'Vendors', href: '/vendors', current: false },
-	{ name: 'Departments', href: '/departments', current: false },
-	{ name: 'Settings', href: '/settings', current: false }
-];
 const teams = [
 	{ id: 1, name: 'Volunteers', href: '#', initial: 'H', current: false },
 	{ id: 2, name: 'Programming', href: '#', initial: 'T', current: false },
@@ -31,6 +23,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		setRedirect(pathname);
 	}, [pathname]);
 
+	const navigation = [
+		{ name: 'Dashboard', href: '/home', current: pathname === '/home' },
+		{ name: 'Guests', href: '/guests', current: pathname === '/guests' },
+		{ name: 'Programming', href: '/programming', current: pathname === '/programming' },
+		{ name: 'Vendors', href: '/vendors', current: pathname === '/vendors' },
+		{ name: 'Departments', href: '/departments', current: pathname === '/departments' },
+		{ name: 'Settings', href: '/settings', current: pathname === '/settings' }
+	];
 	return (
 		<>
 			<SignedOut>

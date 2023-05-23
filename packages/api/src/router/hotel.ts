@@ -16,17 +16,22 @@ const hotelUpdate = z.object({
 })
 
 export const hotelRouter = router({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.hotel.findMany();
-  }),
-  byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.hotel.findFirst({ where: { id: input }, include: { rooms: true } });
-  }),
+  all: publicProcedure
+    .query(({ ctx }) => ctx.prisma.hotel.findMany()),
+  byId: publicProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => ctx.prisma.hotel.findFirst({
+      where: { id: input }, include: {
+        rooms: {
+          include: {
+            availability: true,
+          }
+        },
+      }
+    })),
   create: protectedProcedure
     .input(hotelCreate)
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.hotel.create({ data: input });
-    }),
+    .mutation(({ ctx, input }) => ctx.prisma.hotel.create({ data: input })),
   update: protectedProcedure
     .input(hotelUpdate)
     .mutation(({ ctx, input }) => ctx.prisma.hotel.update({ where: { id: input.id }, data: input.hotel })),

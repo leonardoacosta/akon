@@ -1,11 +1,16 @@
 import Layout from 'components/Layout';
+import GuestInfo from 'components/screens/Guests/Info';
 
-export const Programming = () => {
-	return (
-		<Layout>
-			<h1 className='text-2xl font-bold text-gray-300'>Programming</h1>
-		</Layout>
-	);
-};
+export const Guest = () => (
+	<Layout>
+		<div className='grid grid-cols-2 gap-4'>
+			<GuestInfo />
+			<div>
+				{/* <CreateAvailability />
+				<AvailabilityList /> */}
+			</div>
+		</div>
+	</Layout>
+);
 
-export default Programming;
+export default Guest;

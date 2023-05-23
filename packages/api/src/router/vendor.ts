@@ -21,17 +21,14 @@ const vendorUpdate = z.object({
 })
 
 export const vendorRouter = router({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.vendor.findMany();
-  }),
-  byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.vendor.findFirst({ where: { id: input } });
-  }),
+  all: publicProcedure
+    .query(({ ctx }) => ctx.prisma.vendor.findMany()),
+  byId: publicProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => ctx.prisma.vendor.findFirst({ where: { id: input } })),
   create: protectedProcedure
     .input(vendorCreate)
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.vendor.create({ data: input });
-    }),
+    .mutation(({ ctx, input }) => ctx.prisma.vendor.create({ data: input })),
   update: protectedProcedure
     .input(vendorUpdate)
     .mutation(({ ctx, input }) => ctx.prisma.vendor.update({ where: { id: input.id }, data: input.vendor })),

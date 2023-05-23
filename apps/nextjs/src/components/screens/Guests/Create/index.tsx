@@ -5,14 +5,13 @@ import { Form, Formik } from 'formik';
 import { trpc } from '../../../../utils/trpc';
 import { useState } from 'react';
 import Button from '../../../ui/Button';
-import { useRouter } from 'next/router';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/ui/Select';
 
 export const CreateGroup = () => {
-	const { query } = useRouter();
-	const id = query.props ? query.props[0] : null;
 	const [open, setOpen] = useState(false);
 
 	const { mutate } = trpc.groups.create.useMutation();
+	const { data: tags } = trpc.tags.all.useQuery({ type: 'GROUP' });
 	const { refetch } = trpc.groups.all.useQuery();
 
 	const newEvent: Group = {
@@ -49,10 +48,26 @@ export const CreateGroup = () => {
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
-						<TextInput name='capacity' label='Capacity' type='number' />
+						<fieldset className='mb-[15px] flex items-center gap-5'>
+							<label className='w-[90px] text-right text-[15px] text-gray-500' htmlFor='tags'>
+								Tag
+							</label>
+							<Select>
+								<SelectTrigger name='tags'>
+									<SelectValue placeholder='Select a fruit' />
+								</SelectTrigger>
+								<SelectContent>
+									{tags?.map((tag) => (
+										<SelectItem key={tag.id} value={tag.name}>
+											{tag.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</fieldset>
 						<div className='mt-[25px] flex justify-end'>
 							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
-								Create Room
+								Create Group
 							</Button>
 						</div>
 					</Form>
@@ -62,4 +77,4 @@ export const CreateGroup = () => {
 	);
 };
 
-export default CreateRoom;
+export default CreateGroup;

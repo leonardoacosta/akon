@@ -12,18 +12,26 @@ const tagUpdate = z.object({
   tag: tagCreate,
 })
 
+const tagSelect = z.object({
+  type: z.enum(["PANEL", "GROUP"]).optional(),
+})
+
 export const tagRouter = router({
-  all: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.tag.findMany();
-  }),
-  byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.prisma.tag.findFirst({ where: { id: input } });
-  }),
+  all: publicProcedure
+    .input(tagSelect)
+    .query(({ ctx, input }) => ctx.prisma.tag.findMany({
+      where: {
+        OR: [
+          { type: { equals: input.type } },
+        ]
+      }
+    })),
+  byId: publicProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => ctx.prisma.tag.findFirst({ where: { id: input } })),
   create: protectedProcedure
     .input(tagCreate)
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.tag.create({ data: input });
-    }),
+    .mutation(({ ctx, input }) => ctx.prisma.tag.create({ data: input })),
   update: protectedProcedure
     .input(tagUpdate)
     .mutation(({ ctx, input }) => ctx.prisma.tag.update({ where: { id: input.id }, data: input.tag })),
