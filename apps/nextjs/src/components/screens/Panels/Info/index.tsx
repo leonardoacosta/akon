@@ -7,11 +7,11 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { trpc } from 'utils/trpc';
 
-export const GuestInfo = () => {
+export const PanelInfo = () => {
 	const { query, back } = useRouter();
 	const id = query.props ? query.props[0] : null;
-	const { data, refetch } = trpc.groups.byId.useQuery(id as string, { enabled: !!id });
-	const { mutate } = trpc.groups.update.useMutation();
+	const { data, refetch } = trpc.panels.byId.useQuery(id as string, { enabled: !!id });
+	const { mutate } = trpc.panels.update.useMutation();
 
 	if (!data) return null;
 	return (
@@ -34,7 +34,7 @@ export const GuestInfo = () => {
 						onSubmit={async (values) => {
 							mutate(
 								{
-									group: values,
+									panel: values,
 									id: data.id
 								},
 								{
@@ -49,7 +49,7 @@ export const GuestInfo = () => {
 							<Form onSubmit={handleSubmit}>
 								<TextInput name='name' label='Name' />
 								<TextInput name='description' label='Description' />
-								<TagSelect tagType='GROUP' />
+								<TagSelect tagType='PANEL' />
 								<div className='mt-[25px] flex justify-end'>
 									<Button disabled={!isValid || isSubmitting} loading={isSubmitting}>
 										Save
@@ -64,4 +64,4 @@ export const GuestInfo = () => {
 	);
 };
 
-export default GuestInfo;
+export default PanelInfo;

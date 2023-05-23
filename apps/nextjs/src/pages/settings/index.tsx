@@ -1,4 +1,5 @@
 import Layout from 'components/Layout';
+import { Departments } from 'components/screens/Departments';
 import CreateHotel from 'components/screens/Hotels/Create';
 import HotelList from 'components/screens/Hotels/List';
 import CreateTag from 'components/screens/Tags/Create';
@@ -10,10 +11,11 @@ export const Settings = () => {
 	return (
 		<Layout>
 			<Card>
-				<Tabs defaultValue='tags' className=''>
+				<Tabs defaultValue='departments' className=''>
 					<TabsList>
-						<TabsTrigger value='tags'>Tags</TabsTrigger>
+						<TabsTrigger value='departments'>Departments</TabsTrigger>
 						<TabsTrigger value='hotel'>Hotel</TabsTrigger>
+						<TabsTrigger value='tags'>Tags</TabsTrigger>
 					</TabsList>
 					<TabsContent value='tags'>
 						<CreateTag />
@@ -22,6 +24,9 @@ export const Settings = () => {
 					<TabsContent value='hotel'>
 						<CreateHotel />
 						<HotelList />
+					</TabsContent>
+					<TabsContent value='departments'>
+						<Departments />
 					</TabsContent>
 				</Tabs>
 			</Card>

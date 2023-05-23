@@ -7,6 +7,7 @@ import { memberRouter } from "./member";
 import { panelRouter } from "./panel";
 import { roomRouter } from "./room";
 import { tagRouter } from "./tags";
+import { userRouter } from "./users";
 import { vendorRouter } from "./vendor";
 import { vendorHallRouter } from "./vendorHall";
 
@@ -20,7 +21,8 @@ export const appRouter = router({
   room: roomRouter,
   tags: tagRouter,
   vendors: vendorRouter,
-  vendorHalls: vendorHallRouter
+  vendorHalls: vendorHallRouter,
+  users: userRouter
 });
 
 // export type definition of API

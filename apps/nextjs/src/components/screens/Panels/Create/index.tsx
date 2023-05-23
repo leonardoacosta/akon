@@ -5,8 +5,8 @@ import { Form, Formik } from 'formik';
 import { trpc } from '../../../../utils/trpc';
 import { useState } from 'react';
 import Button from '../../../ui/Button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/ui/Select';
 import { useRouter } from 'next/router';
+import TagSelect from 'components/ui/TagSelect';
 
 export const CreatePanel = () => {
 	const [open, setOpen] = useState(false);
@@ -14,7 +14,6 @@ export const CreatePanel = () => {
 	const id = query.props ? query.props[0] : null;
 
 	const { mutate } = trpc.panels.create.useMutation();
-	const { data: tags } = trpc.tags.all.useQuery({ type: 'PANEL' });
 	const { refetch } = trpc.panels.all.useQuery({ guestId: id as string });
 
 	const newPanel: Panel = {
@@ -49,43 +48,24 @@ export const CreatePanel = () => {
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
+					setSubmitting(true);
 					mutate(values, {
 						onSuccess: () => {
-							setOpen(false);
 							refetch();
+							setSubmitting(false);
+							setOpen(false);
 						}
 					});
 				}}
 			>
-				{({ isValid, isSubmitting, setFieldValue }) => (
+				{({ isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
-
-						<fieldset className='mb-[15px] flex items-center gap-5'>
-							<label className='w-[90px] text-right text-[15px] text-gray-500' htmlFor='tags'>
-								Tag
-							</label>
-							<Select
-								onValueChange={(e) => {
-									setFieldValue('tagId', e);
-								}}
-							>
-								<SelectTrigger name='tagId'>
-									<SelectValue placeholder='Select a Tag' />
-								</SelectTrigger>
-								<SelectContent>
-									{tags?.map((tag) => (
-										<SelectItem key={tag.id} value={tag.id}>
-											{tag.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</fieldset>
+						<TagSelect tagType='PANEL' />
 						<div className='mt-[25px] flex justify-end'>
 							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
-								Create Group
+								Create Panel
 							</Button>
 						</div>
 					</Form>
