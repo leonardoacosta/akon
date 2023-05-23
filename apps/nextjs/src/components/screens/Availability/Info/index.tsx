@@ -26,7 +26,8 @@ export const AvailabilityInfo = () => {
 			<CardContent>
 				<Formik
 					initialValues={data}
-					onSubmit={async (values) => {
+					onSubmit={async (values, { setSubmitting }) => {
+						setSubmitting(true);
 						mutate(
 							{
 								availability: values,
@@ -34,6 +35,8 @@ export const AvailabilityInfo = () => {
 							},
 							{
 								onSuccess: () => {
+									setSubmitting(false);
+
 									refetch();
 									back();
 								}
@@ -43,9 +46,8 @@ export const AvailabilityInfo = () => {
 				>
 					{({ values, handleChange, handleBlur, handleSubmit, isValid, isSubmitting }) => (
 						<Form onSubmit={handleSubmit}>
-							<TextInput name='date' label='Date' type='date' />
-							<TextInput name='start' label='Start' type='time' />
-							<TextInput name='end' label='End' type='time' />
+							<TextInput name='startTime' label='Start' type='datetime-local' />
+							<TextInput name='endTime' label='End' type='datetime-local' />
 							<div className='mt-[25px] flex justify-end'>
 								<Button disabled={!isValid || isSubmitting} loading={isSubmitting}>
 									Save

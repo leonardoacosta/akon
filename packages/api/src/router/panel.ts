@@ -9,7 +9,10 @@ const panelCreate = z.object({
   groupId: z.string(),
   eightteenPlus: z.boolean().default(false),
   approved: z.boolean().default(false),
+  approvalSent: z.coerce.date().optional(),
   denied: z.boolean().default(false),
+  deniedReason: z.string().optional(),
+  denialSent: z.coerce.date().optional(),
   tagId: z.string(),
 
 })

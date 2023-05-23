@@ -2,8 +2,6 @@ import { useUser } from '@clerk/nextjs';
 import Layout from '../../components/Layout';
 import { trpc } from '../../utils/trpc';
 import CreateEvent from '../../components/screens/Events/Create';
-import CreateHotel from '../../components/screens/Hotels/Create';
-import HotelList from 'components/screens/Hotels/List';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/Card';
 
 export const Home = () => {
@@ -23,10 +21,7 @@ export const Home = () => {
 							<p className='text-gray-300'>{data?.description}</p>
 						</CardDescription>
 					</CardHeader>
-					<CardContent>
-						<CreateHotel />
-						<HotelList />
-					</CardContent>
+					<CardContent></CardContent>
 				</Card>
 			) : isAdmin && !data ? (
 				<div className='relative block w-full rounded-lg border-2 border-gray-300 bg-gradient-to-r from-slate-900/90 to-slate-900/20 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'>

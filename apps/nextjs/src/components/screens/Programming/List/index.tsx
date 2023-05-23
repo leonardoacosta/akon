@@ -1,14 +1,17 @@
 import { trpc } from 'utils/trpc';
 import { DataTable } from 'components/ui/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Hotel } from '@acme/db';
+import { Panel } from '@acme/db';
 import Button from 'components/ui/Button';
 import { ArrowBigRightDash } from 'lucide-react';
 import Link from 'next/link';
 
-export const HotelList = () => {
-	const { data } = trpc.events.getCurrent.useQuery();
-	const columns: ColumnDef<Hotel>[] = [
+export const PanelList = () => {
+	const { data: currentEvent } = trpc.events.getCurrent.useQuery();
+	const { data: allPanels } = trpc.panels.all.useQuery(undefined, {
+		enabled: !!currentEvent
+	});
+	const columns: ColumnDef<Panel>[] = [
 		{
 			accessorKey: 'name',
 			header: 'Name'
@@ -33,7 +36,7 @@ export const HotelList = () => {
 			}
 		}
 	];
-	return <DataTable columns={columns} data={data?.hotels ?? []} noneMessage='No conference centers yet' />;
+	return <DataTable columns={columns} data={allPanels ?? []} noneMessage='No panels to review' />;
 };
 
-export default HotelList;
+export default PanelList;

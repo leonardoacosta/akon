@@ -62,41 +62,70 @@ model Availability {
 }
 
 model Panel {
-    id            String   @id @default(cuid())
-    name          String
-    description   String
-    start         DateTime
-    end           DateTime
-    eightteenPlus Boolean  @default(false)
-    approved      Boolean  @default(false)
-    denied        Boolean  @default(false)
+    id           String    @id @default(cuid())
+    name         String
+    description  String
+    start        DateTime
+    end          DateTime
+    approved     Boolean   @default(false)
+    approvalSent DateTime?
+    denied       Boolean   @default(false)
+    deniedReason String?
+    deniedSent   DateTime?
 
-    group   Group    @relation(fields: [groupId], references: [id])
-    groupId String
-    tag     Tag      @relation(fields: [tagId], references: [id])
-    tagId   String
-    rooms   Room?    @relation(fields: [roomId], references: [id])
-    roomId  String?
-    note    Note[]
-    members Member[]
+    eightteenPlus Boolean @default(false)
+
+    group     Group       @relation(fields: [groupId], references: [id])
+    groupId   String
+    tagId     String
+    rooms     Room?       @relation(fields: [roomId], references: [id])
+    roomId    String?
+    note      Note[]
+    members   Member[]
+    Panel_Tag Panel_Tag[]
 }
 
 model Tag {
-    id   String @id @default(cuid())
-    name String
+    id         String      @id @default(cuid())
+    name       String
+    classNames String
+    type       TagType     @default(PANEL)
+    Group_Tag  Group_Tag[]
+    Panel_Tag  Panel_Tag[]
+}
 
-    panel Panel[]
+enum TagType {
+    GROUP
+    PANEL
+}
+
+model Group_Tag {
+    id      String @id @default(cuid())
+    groupId String
+    tagId   String
+    group   Group  @relation(fields: [groupId], references: [id])
+    tag     Tag    @relation(fields: [tagId], references: [id])
+}
+
+model Panel_Tag {
+    id      String @id @default(cuid())
+    panel   Panel  @relation(fields: [panelId], references: [id])
+    tag     Tag    @relation(fields: [tagId], references: [id])
+    panelId String
+    tagId   String
 }
 
 model Group {
     id          String  @id @default(cuid())
     name        String
     description String
-    apprvoved   Boolean @default(false)
+    approved    Boolean @default(false)
 
     panels  Panel[]
     members Member[]
     notes   Note[]
+
+    Group_Tag Group_Tag[]
 }
 
 model Note {

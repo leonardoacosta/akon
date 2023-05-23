@@ -57,39 +57,7 @@ export function DataTable<TData, TValue>({ columns, data, noneMessage }: DataTab
 	});
 
 	return (
-		<div className='w-full '>
-			<div className='flex items-center py-2'>
-				{/* <TextInput
-					placeholder='Filter emails...'
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-					onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
-					className='max-w-sm'
-				/> 
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button>
-							Columns <ChevronDown className='ml-2 h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className='capitalize'
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) => column.toggleVisibility(!!value)}
-									>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>*/}
-			</div>
+		<div className='w-full py-2'>
 			<div className='rounded-md border  p-6'>
 				<Table>
 					<TableHeader>

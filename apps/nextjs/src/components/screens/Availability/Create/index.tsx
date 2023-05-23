@@ -47,16 +47,17 @@ export const CreateAvailability = () => {
 						return errors;
 					}}
 					onSubmit={(values, { setSubmitting }) => {
+						setSubmitting(true);
 						mutate(values, {
 							onSuccess: () => {
 								refetch();
 								setOpen(false);
+								setSubmitting(false);
 							},
 							onError: (error) => {
 								console.log(error.message);
 							}
 						});
-						setSubmitting(false);
 					}}
 				>
 					{({ isValid, isSubmitting }) => (

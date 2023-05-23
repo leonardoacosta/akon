@@ -1,34 +1,32 @@
-import { Event } from '@acme/db';
+import { Group, Room } from '@acme/db';
 import Modal from '../../../ui/Modal';
 import { TextInput } from '../../../ui/TextInput';
 import { Form, Formik } from 'formik';
 import { trpc } from '../../../../utils/trpc';
 import { useState } from 'react';
 import Button from '../../../ui/Button';
+import { useRouter } from 'next/router';
 
-export const CreateEvent = () => {
+export const CreateGroup = () => {
+	const { query } = useRouter();
+	const id = query.props ? query.props[0] : null;
 	const [open, setOpen] = useState(false);
-	const { refetch } = trpc.events.getCurrent.useQuery();
-	const { mutate } = trpc.events.create.useMutation();
 
-	const newEvent: Event = {
+	const { mutate } = trpc.groups.create.useMutation();
+	const { refetch } = trpc.groups.all.useQuery();
+
+	const newEvent: Group = {
 		id: '',
 		name: '',
 		description: '',
-		startDate: new Date(),
-		endDate: new Date(),
-		location: '',
-		address: '',
-		city: '',
-		state: '',
-		zip: ''
+		approved: true
 	};
 
 	return (
 		<Modal
-			buttonLabel='Create a new Event'
-			modalTitle='New Event'
-			modalDescription='This is needed to create everything else!'
+			buttonLabel='Add Group'
+			modalTitle='New Group'
+			modalDescription='These represent guests, troupes, panelist, and other groups that will be attending the event.'
 			open={open}
 			setOpen={setOpen}
 		>
@@ -41,29 +39,20 @@ export const CreateEvent = () => {
 				onSubmit={(values, { setSubmitting }) => {
 					mutate(values, {
 						onSuccess: () => {
-							refetch();
 							setOpen(false);
-							// close modal
+							refetch();
 						}
 					});
-					setSubmitting(false);
 				}}
 			>
 				{({ isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
-						<TextInput name='startDate' label='startDate' type='date' />
-						<TextInput name='endDate' label='endDate' type='date' />
-						<TextInput name='location' label='location' />
-						<TextInput name='address' label='address' />
-						<TextInput name='city' label='city' />
-						<TextInput name='state' label='state' />
-						<TextInput name='zip' label='zip' />
-
+						<TextInput name='capacity' label='Capacity' type='number' />
 						<div className='mt-[25px] flex justify-end'>
 							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
-								Create Event
+								Create Room
 							</Button>
 						</div>
 					</Form>
@@ -73,4 +62,4 @@ export const CreateEvent = () => {
 	);
 };
 
-export default CreateEvent;
+export default CreateRoom;

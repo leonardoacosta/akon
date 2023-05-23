@@ -1,48 +1,47 @@
-import { Hotel } from '@acme/db';
+import { Tag } from '@acme/db';
 import Modal from '../../../ui/Modal';
 import { TextInput } from '../../../ui/TextInput';
 import { Form, Formik } from 'formik';
 import { trpc } from '../../../../utils/trpc';
 import { useState } from 'react';
 import Button from '../../../ui/Button';
+import Checkbox from 'components/ui/Checkbox';
 
-export const CreateHotel = () => {
+export const CreateTag = () => {
 	const [open, setOpen] = useState(false);
-	const { mutate } = trpc.hotels.create.useMutation();
-	const { data, refetch } = trpc.events.getCurrent.useQuery();
 
-	const newEvent: Hotel = {
+	const { mutate } = trpc.tags.create.useMutation();
+	const { refetch } = trpc.tags.all.useQuery();
+
+	const newtag: Tag = {
 		id: '',
 		name: '',
-		address: '',
-		city: '',
-		state: '',
-		zip: '',
-		eventId: ''
+		classNames: '',
+		type: 'GROUP'
 	};
 
 	return (
 		<Modal
-			buttonLabel='Add Conference Center'
-			modalTitle='New Conference Center'
-			modalDescription='These will hold the rooms that will be available for panels and events.'
+			buttonLabel='Add Tag'
+			modalTitle='New Tag'
+			modalDescription='These will help manage panels and guests.'
 			open={open}
 			setOpen={setOpen}
 		>
 			<Formik
-				initialValues={newEvent}
+				initialValues={newtag}
 				validate={(values) => {
-					const errors = {};
+					const errors: any = {};
+					if (!values.name) errors['name'] = 'Required';
+					if (!values.classNames) errors['classNames'] = 'Required';
+
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					setSubmitting(true);
-					values.eventId = `${data?.id}`;
 					mutate(values, {
 						onSuccess: () => {
-							refetch();
-							setSubmitting(false);
 							setOpen(false);
+							refetch();
 						}
 					});
 				}}
@@ -50,15 +49,13 @@ export const CreateHotel = () => {
 				{({ isValid, isSubmitting }) => (
 					<Form>
 						<TextInput name='name' label='Name' />
-						<TextInput name='location' label='location' />
-						<TextInput name='address' label='address' />
-						<TextInput name='city' label='city' />
-						<TextInput name='state' label='state' />
-						<TextInput name='zip' label='zip' />
-
+						<TextInput name='classNames' label='Tailwind Class Names' />
+						<label className='block text-sm font-medium text-gray-700'>Type</label>
+						<Checkbox name='type' value='PANEL' label='Panel tag' />
+						<Checkbox name='type' value='GROUP' label='Group tag' />
 						<div className='mt-[25px] flex justify-end'>
 							<Button onClick={() => setOpen(true)} disabled={!isValid || isSubmitting} loading={isSubmitting}>
-								Create Conference Center
+								Create Tag
 							</Button>
 						</div>
 					</Form>
@@ -68,4 +65,4 @@ export const CreateHotel = () => {
 	);
 };
 
-export default CreateHotel;
+export default CreateTag;

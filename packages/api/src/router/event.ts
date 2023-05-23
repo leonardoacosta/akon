@@ -25,7 +25,11 @@ export const eventRouter = router({
     getCurrent: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.event.findFirst({
             where: { endDate: { gt: new Date() } },
-            include: { hotels: true }
+            include: {
+                hotels: {
+                    include: { rooms: true }
+                }
+            }
         });
     }),
     byId: publicProcedure.input(z.string()).query(({ ctx, input }) => {

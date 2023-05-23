@@ -4,18 +4,17 @@ import { useEffect, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { RedirectToSignIn, SignedOut, UserButton, useAuth } from '@clerk/nextjs';
+import { RedirectToSignIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
 const navigation = [
-	{ name: 'Dashboard', href: '#', current: true },
-	{ name: 'Guests', href: '#', current: false },
-	{ name: 'Panelists', href: '#', current: false },
-	{ name: 'Vendors', href: '#', current: false },
-	{ name: 'Departments', href: '#', current: false },
-	{ name: 'Settings', href: '#', current: false }
+	{ name: 'Dashboard', href: '/home', current: true },
+	{ name: 'Guests', href: '/guests', current: false },
+	{ name: 'Programming', href: '/programming', current: false },
+	{ name: 'Vendors', href: '/vendors', current: false },
+	{ name: 'Departments', href: '/departments', current: false },
+	{ name: 'Settings', href: '/settings', current: false }
 ];
 const teams = [
 	{ id: 1, name: 'Volunteers', href: '#', initial: 'H', current: false },

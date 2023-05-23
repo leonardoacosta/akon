@@ -1,16 +1,17 @@
 import Button from 'components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/ui/Card';
+import Checkbox from 'components/ui/Checkbox';
 import { TextInput } from 'components/ui/TextInput';
 import { Form, Formik } from 'formik';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { trpc } from 'utils/trpc';
 
-export const RoomInfo = () => {
+export const TagInfo = () => {
 	const { query, back } = useRouter();
 	const id = query.props ? query.props[0] : null;
-	const { data, refetch } = trpc.room.byId.useQuery(id as string, { enabled: !!id });
-	const { mutate } = trpc.room.update.useMutation();
+	const { data, refetch } = trpc.tags.byId.useQuery(id as string, { enabled: !!id });
+	const { mutate } = trpc.tags.update.useMutation();
 
 	if (!data) return null;
 	return (
@@ -24,7 +25,7 @@ export const RoomInfo = () => {
 						<h1 className='text-2xl font-bold text-gray-300'>{data?.name}</h1>
 					</CardTitle>
 					<CardDescription>
-						<p className='text-gray-300'>{data?.description}</p>
+						<p className='text-gray-300'>Chip Example</p>
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -33,12 +34,13 @@ export const RoomInfo = () => {
 						onSubmit={async (values) => {
 							mutate(
 								{
-									room: values,
+									tag: values,
 									id: data.id
 								},
 								{
 									onSuccess: () => {
 										refetch();
+										back();
 									}
 								}
 							);
@@ -47,8 +49,10 @@ export const RoomInfo = () => {
 						{({ handleSubmit, isValid, isSubmitting }) => (
 							<Form onSubmit={handleSubmit}>
 								<TextInput name='name' label='Name' />
-								<TextInput name='description' label='Description' />
-								<TextInput name='capacity' label='Capacity' type='number' />
+								<TextInput name='classNames' label='Tailwind Class Names' />
+								<label className='block text-sm font-medium text-gray-700'>Type</label>
+								<Checkbox name='type' value='PANEL' label='Panel tag' />
+								<Checkbox name='type' value='GROUP' label='Group tag' />
 								<div className='mt-[25px] flex justify-end'>
 									<Button disabled={!isValid || isSubmitting} loading={isSubmitting}>
 										Save
@@ -63,4 +67,4 @@ export const RoomInfo = () => {
 	);
 };
 
-export default RoomInfo;
+export default TagInfo;
