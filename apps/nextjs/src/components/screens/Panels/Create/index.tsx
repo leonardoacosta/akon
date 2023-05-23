@@ -1,4 +1,4 @@
-import { Group } from '@acme/db';
+import { Panel } from '@acme/db';
 import Modal from '../../../ui/Modal';
 import { TextInput } from '../../../ui/TextInput';
 import { Form, Formik } from 'formik';
@@ -6,38 +6,46 @@ import { trpc } from '../../../../utils/trpc';
 import { useState } from 'react';
 import Button from '../../../ui/Button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/ui/Select';
+import { useRouter } from 'next/router';
 
-export const CreateGroup = () => {
+export const CreatePanel = () => {
 	const [open, setOpen] = useState(false);
+	const { query } = useRouter();
+	const id = query.props ? query.props[0] : null;
 
-	const { mutate } = trpc.groups.create.useMutation();
-	const { data: tags } = trpc.tags.all.useQuery({ type: 'GROUP' });
-	const { refetch } = trpc.groups.all.useQuery();
+	const { mutate } = trpc.panels.create.useMutation();
+	const { data: tags } = trpc.tags.all.useQuery({ type: 'PANEL' });
+	const { refetch } = trpc.panels.all.useQuery({ guestId: id as string });
 
-	const newEvent: Group = {
+	const newPanel: Panel = {
 		id: '',
+		groupId: id as string,
 		name: '',
 		description: '',
-		approved: true,
+		start: new Date(),
+		end: new Date(),
+		approved: false,
+		approvalSent: null,
+		denied: false,
+		deniedReason: '',
+		deniedSent: null,
+		eightteenPlus: false,
+		roomId: null,
 		tagId: ''
 	};
 
 	return (
 		<Modal
-			buttonLabel='Add Group'
-			modalTitle='New Group'
-			modalDescription='These represent guests, troupes, panelist, and other groups that will be attending the event.'
+			buttonLabel='Add Panel'
+			modalTitle='New Panel'
+			modalDescription='Submit a panel for review!'
 			open={open}
 			setOpen={setOpen}
 		>
 			<Formik
-				initialValues={newEvent}
+				initialValues={newPanel}
 				validate={(values) => {
-					const errors: any = {};
-					if (!values.name) errors['name'] = 'Required';
-					if (!values.description) errors['description'] = 'Required';
-					if (!values.tagId) errors['tagId'] = 'Required';
-					console.log(values, errors);
+					const errors = {};
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
@@ -53,6 +61,7 @@ export const CreateGroup = () => {
 					<Form>
 						<TextInput name='name' label='Name' />
 						<TextInput name='description' label='Description' />
+
 						<fieldset className='mb-[15px] flex items-center gap-5'>
 							<label className='w-[90px] text-right text-[15px] text-gray-500' htmlFor='tags'>
 								Tag
@@ -86,4 +95,4 @@ export const CreateGroup = () => {
 	);
 };
 
-export default CreateGroup;
+export default CreatePanel;

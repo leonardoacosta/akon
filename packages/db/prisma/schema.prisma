@@ -75,44 +75,28 @@ model Panel {
 
     eightteenPlus Boolean @default(false)
 
-    group     Group       @relation(fields: [groupId], references: [id])
-    groupId   String
-    tagId     String
-    rooms     Room?       @relation(fields: [roomId], references: [id])
-    roomId    String?
-    note      Note[]
-    members   Member[]
-    Panel_Tag Panel_Tag[]
+    group   Group    @relation(fields: [groupId], references: [id])
+    groupId String
+    room    Room?    @relation(fields: [roomId], references: [id])
+    roomId  String?
+    note    Note[]
+    members Member[]
+    tag     Tag      @relation(fields: [tagId], references: [id])
+    tagId   String
 }
 
 model Tag {
-    id         String      @id @default(cuid())
+    id         String  @id @default(cuid())
     name       String
     classNames String
-    type       TagType     @default(PANEL)
-    Group_Tag  Group_Tag[]
-    Panel_Tag  Panel_Tag[]
+    type       TagType @default(PANEL)
+    Groups     Group[]
+    Panels     Panel[]
 }
 
 enum TagType {
     GROUP
     PANEL
-}
-
-model Group_Tag {
-    id      String @id @default(cuid())
-    groupId String
-    tagId   String
-    group   Group  @relation(fields: [groupId], references: [id])
-    tag     Tag    @relation(fields: [tagId], references: [id])
-}
-
-model Panel_Tag {
-    id      String @id @default(cuid())
-    panel   Panel  @relation(fields: [panelId], references: [id])
-    tag     Tag    @relation(fields: [tagId], references: [id])
-    panelId String
-    tagId   String
 }
 
 model Group {
@@ -125,7 +109,8 @@ model Group {
     members Member[]
     notes   Note[]
 
-    Group_Tag Group_Tag[]
+    tag   Tag    @relation(fields: [tagId], references: [id])
+    tagId String
 }
 
 model Note {

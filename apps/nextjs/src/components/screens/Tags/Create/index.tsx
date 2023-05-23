@@ -11,7 +11,7 @@ export const CreateTag = () => {
 	const [open, setOpen] = useState(false);
 
 	const { mutate } = trpc.tags.create.useMutation();
-	const { refetch } = trpc.tags.all.useQuery();
+	const { refetch } = trpc.tags.all.useQuery({});
 
 	const newtag: Tag = {
 		id: '',

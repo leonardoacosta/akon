@@ -7,7 +7,7 @@ import { ArrowBigRightDash } from 'lucide-react';
 import Link from 'next/link';
 
 export const TagList = () => {
-	const { data: allTags } = trpc.tags.all.useQuery(undefined);
+	const { data: allTags } = trpc.tags.all.useQuery({});
 
 	const columns: ColumnDef<Tag>[] = [
 		{

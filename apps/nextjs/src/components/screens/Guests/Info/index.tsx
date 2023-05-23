@@ -55,8 +55,8 @@ export const GuestInfo = () => {
 										Tag
 									</label>
 									<Select>
-										<SelectTrigger name='tags'>
-											<SelectValue placeholder='Select a fruit' />
+										<SelectTrigger name='tagId'>
+											<SelectValue placeholder='Select a Tag' />
 										</SelectTrigger>
 										<SelectContent>
 											{tags?.map((tag) => (

@@ -1,5 +1,5 @@
 import Layout from 'components/Layout';
-import PanelList from 'components/screens/Programming/List';
+import PanelList from 'components/screens/Panels/List';
 
 export const Programming = () => {
 	return (
