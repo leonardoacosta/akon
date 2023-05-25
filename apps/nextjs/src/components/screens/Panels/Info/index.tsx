@@ -30,6 +30,7 @@ export const PanelInfo = () => {
 				</CardHeader>
 				<CardContent>
 					<Formik
+						validateOnMount
 						initialValues={data}
 						onSubmit={async (values) => {
 							mutate(

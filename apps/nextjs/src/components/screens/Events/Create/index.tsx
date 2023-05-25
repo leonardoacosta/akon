@@ -38,6 +38,7 @@ export const CreateEvent = () => {
 					const errors = {};
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					mutate(values, {
 						onSuccess: () => {

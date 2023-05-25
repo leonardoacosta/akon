@@ -37,6 +37,7 @@ export const CreateRoom = () => {
 					const errors = {};
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					values.hotelId = id as string;
 					mutate(values, {

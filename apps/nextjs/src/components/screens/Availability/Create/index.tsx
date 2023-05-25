@@ -40,6 +40,7 @@ export const CreateAvailability = () => {
 				setOpen={setOpen}
 			>
 				<Formik
+					validateOnMount
 					initialValues={newAvailability}
 					validate={(values) => {
 						const errors = {};

@@ -29,6 +29,7 @@ export const RoomInfo = () => {
 				</CardHeader>
 				<CardContent>
 					<Formik
+						validateOnMount
 						initialValues={data}
 						onSubmit={async (values) => {
 							mutate(

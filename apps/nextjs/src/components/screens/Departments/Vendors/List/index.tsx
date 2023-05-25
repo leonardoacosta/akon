@@ -5,7 +5,7 @@ import Button from 'components/ui/Button';
 import { XSquareIcon } from 'lucide-react';
 import { User } from '@clerk/nextjs/api';
 
-export const Vendors = () => {
+export const VendorsList = () => {
 	const { data, refetch } = trpc.users.all.useQuery({ department: 'isVendors' });
 	const { mutate, isLoading } = trpc.users.toggleDepartment.useMutation({
 		onSuccess: () => {
@@ -24,6 +24,14 @@ export const Vendors = () => {
 			)
 		},
 		{
+			header: 'Email',
+			cell: ({ row }) => <span>{row.original.emailAddresses.map((e) => e.emailAddress + ' ')}</span>
+		},
+		{
+			header: 'Phone',
+			cell: ({ row }) => <span>{row.original.phoneNumbers.map((e) => e.phoneNumber + ' ')}</span>
+		},
+		{
 			header: 'Remove',
 			cell: ({ row }) => {
 				const user = row.original;
@@ -39,4 +47,4 @@ export const Vendors = () => {
 	return <DataTable columns={columns} data={data ?? []} noneMessage='No one is in Programming' />;
 };
 
-export default Vendors;
+export default VendorsList;

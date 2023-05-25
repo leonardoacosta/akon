@@ -30,6 +30,7 @@ export const TagInfo = () => {
 				</CardHeader>
 				<CardContent>
 					<Formik
+						validateOnMount
 						initialValues={data}
 						onSubmit={async (values) => {
 							mutate(

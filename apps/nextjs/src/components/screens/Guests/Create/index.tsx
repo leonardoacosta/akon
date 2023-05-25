@@ -39,6 +39,7 @@ export const CreateGroup = () => {
 					console.log(values, errors);
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					setSubmitting(true);
 					mutate(values, {

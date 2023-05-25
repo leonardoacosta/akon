@@ -47,6 +47,7 @@ export const CreatePanel = () => {
 					const errors = {};
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					setSubmitting(true);
 					mutate(values, {

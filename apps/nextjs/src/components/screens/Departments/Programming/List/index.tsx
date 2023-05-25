@@ -3,12 +3,9 @@ import { DataTable } from 'components/ui/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 import Button from 'components/ui/Button';
 import { XSquareIcon } from 'lucide-react';
-import { useUser } from '@clerk/nextjs';
 import { User } from '@clerk/nextjs/api';
 
-export const Programming = () => {
-	const { user } = useUser();
-
+export const ProgrammingList = () => {
 	const { data, refetch } = trpc.users.all.useQuery({ department: 'isProgramming' });
 	const { mutate, isLoading } = trpc.users.toggleDepartment.useMutation({
 		onSuccess: () => {
@@ -27,6 +24,14 @@ export const Programming = () => {
 			)
 		},
 		{
+			header: 'Email',
+			cell: ({ row }) => <span>{row.original.emailAddresses.map((e) => e.emailAddress + ' ')}</span>
+		},
+		{
+			header: 'Phone',
+			cell: ({ row }) => <span>{row.original.phoneNumbers.map((e) => e.phoneNumber + ' ')}</span>
+		},
+		{
 			header: 'Remove',
 			cell: ({ row }) => {
 				const user = row.original;
@@ -42,4 +47,4 @@ export const Programming = () => {
 	return <DataTable columns={columns} data={data ?? []} noneMessage='No one is in Programming' />;
 };
 
-export default Programming;
+export default ProgrammingList;

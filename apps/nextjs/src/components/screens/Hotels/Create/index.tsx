@@ -35,6 +35,7 @@ export const CreateHotel = () => {
 					const errors = {};
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					setSubmitting(true);
 					values.eventId = `${data?.id}`;

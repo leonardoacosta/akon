@@ -37,6 +37,7 @@ export const CreateTag = () => {
 
 					return errors;
 				}}
+				validateOnMount
 				onSubmit={(values, { setSubmitting }) => {
 					mutate(values, {
 						onSuccess: () => {

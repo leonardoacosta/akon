@@ -25,6 +25,7 @@ export const AvailabilityInfo = () => {
 			</CardHeader>
 			<CardContent>
 				<Formik
+					validateOnMount
 					initialValues={data}
 					onSubmit={async (values, { setSubmitting }) => {
 						setSubmitting(true);
