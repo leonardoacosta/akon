@@ -75,13 +75,12 @@ model Panel {
 
     eightteenPlus Boolean @default(false)
 
-    group   Group    @relation(fields: [groupId], references: [id])
+    group   Group   @relation(fields: [groupId], references: [id])
     groupId String
-    room    Room?    @relation(fields: [roomId], references: [id])
+    room    Room?   @relation(fields: [roomId], references: [id])
     roomId  String?
     note    Note[]
-    members Member[]
-    tag     Tag      @relation(fields: [tagId], references: [id])
+    tag     Tag     @relation(fields: [tagId], references: [id])
     tagId   String
 }
 
@@ -131,8 +130,6 @@ model Member {
     group   Group   @relation(fields: [groupId], references: [id])
     groupId String
     active  Boolean @default(true)
-    panel   Panel?  @relation(fields: [panelId], references: [id])
-    panelId String?
 }
 
 // Vendor Hall

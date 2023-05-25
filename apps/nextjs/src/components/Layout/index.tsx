@@ -4,17 +4,19 @@ import { useEffect, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { RedirectToSignIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { RedirectToSignIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const teams = [
-	{ id: 1, name: 'Volunteers', href: '#', initial: 'H', current: false },
-	{ id: 2, name: 'Programming', href: '#', initial: 'T', current: false },
-	{ id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
-];
+interface INav {
+	name: string;
+	href: string;
+	current: boolean;
+	initial?: string;
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+	const { user } = useUser();
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const [redirect, setRedirect] = useState('');
 	const { pathname } = useRouter();
@@ -23,14 +25,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		setRedirect(pathname);
 	}, [pathname]);
 
-	const navigation = [
+	const navigation: INav[] = [
 		{ name: 'Dashboard', href: '/home', current: pathname === '/home' },
-		{ name: 'Guests', href: '/guests', current: pathname === '/guests' },
-		{ name: 'Programming', href: '/programming', current: pathname === '/programming' },
-		{ name: 'Vendors', href: '/vendors', current: pathname === '/vendors' },
-		{ name: 'Departments', href: '/departments', current: pathname === '/departments' },
-		{ name: 'Settings', href: '/settings', current: pathname === '/settings' }
+		{ name: 'Announcements', href: '/announcements', current: pathname === '/announcements' },
+		{ name: 'Schedule', href: '/schedule', current: pathname === '/schedule' }
 	];
+
+	const teams: INav[] = [];
+
+	if (user?.publicMetadata.isPanelist)
+		navigation.push({ name: 'Panelist', href: '/panelist', current: pathname === '/panelist' });
+	if (user?.publicMetadata.isVolunteer)
+		navigation.push({ name: 'Volunteer', href: '/volunteer', current: pathname === '/volunteer' });
+	if (user?.publicMetadata.isVendor)
+		navigation.push({ name: 'Vendor', href: '/vendor', current: pathname === '/vendor' });
+
+	if (user?.publicMetadata.isGuests)
+		teams.push({ name: 'Guests', href: '/guests', current: pathname === '/guests', initial: 'G' });
+	if (user?.publicMetadata.isProgramming)
+		teams.push({ name: 'Programming', href: '/programming', current: pathname === '/programming', initial: 'Prg' });
+	if (user?.publicMetadata.isVolunteers)
+		teams.push({ name: 'Volunteers', href: '/volunteers', current: pathname === '/volunteers', initial: 'Vo' });
+	if (user?.publicMetadata.isVendors)
+		teams.push({ name: 'Vendors', href: '/vendors', current: pathname === '/vendors', initial: 'Ve' });
+	if (user?.publicMetadata.isAdmin)
+		teams.push({ name: 'Admin', href: '/admin', current: pathname === '/admin', initial: 'A' });
+
 	return (
 		<>
 			<SignedOut>
@@ -196,7 +216,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 									<ul role='list' className='-mx-2 mt-2 space-y-1'>
 										{teams.map((team) => (
 											<li key={team.name}>
-												<a
+												<Link
 													href={team.href}
 													className={clsx(
 														team.current ? 'bg-rose-600 text-white' : 'hover:text-white-600 text-white hover:bg-rose-600',
@@ -214,7 +234,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 														{team.initial}
 													</span>
 													<span className='truncate'>{team.name}</span>
-												</a>
+												</Link>
 											</li>
 										))}
 									</ul>
@@ -231,7 +251,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 						<HamburgerMenuIcon />
 					</button>
 					<div className='flex-1 text-sm font-semibold leading-6 text-gray-900'>Dashboard</div>
-					<a href='#'>
+					<Link href='#'>
 						<span className='sr-only'>Your profile</span>
 						<UserButton
 							appearance={{
@@ -243,7 +263,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 								}
 							}}
 						/>
-					</a>
+					</Link>
 				</div>
 
 				<main className='lg:pl-72'>

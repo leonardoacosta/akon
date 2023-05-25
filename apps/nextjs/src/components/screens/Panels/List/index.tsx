@@ -38,7 +38,7 @@ export const PanelList = () => {
 			cell: ({ row }) => {
 				const panel = row.original;
 				return (
-					<Link href={`/panels/${panel.id}`}>
+					<Link href={`programming/panels/${panel.id}`}>
 						<Button secondary>
 							<span className='sr-only'>Open menu</span>
 							<ArrowBigRightDash className='h-4 w-4' />

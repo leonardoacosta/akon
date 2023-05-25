@@ -26,6 +26,20 @@ export const groupRouter = router({
   create: protectedProcedure
     .input(groupCreate)
     .mutation(({ ctx, input }) => ctx.prisma.group.create({ data: input })),
+  request: protectedProcedure
+    .input(groupCreate)
+    .mutation(async ({ ctx, input }) => {
+      const group = await ctx.prisma.group.create({ data: input })
+      await ctx.prisma.member.create({
+        data: {
+          userId: ctx.auth.userId,
+          groupId: group.id
+        }
+      });
+
+      return group
+
+    }),
   update: protectedProcedure
     .input(groupUpdate)
     .mutation(({ ctx, input }) => ctx.prisma.group.update({ where: { id: input.id }, data: input.group })),

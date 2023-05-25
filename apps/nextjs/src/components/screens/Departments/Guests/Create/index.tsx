@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Button from 'components/ui/Button';
 import { Departments } from '@acme/api/src/router/users';
 
-export const AddToProgramming = () => {
+export const AddToGuests = () => {
 	const [open, setOpen] = useState(false);
 	const [email, setEmail] = useState('');
 	const {
@@ -14,8 +14,8 @@ export const AddToProgramming = () => {
 		refetch: refetchUsers,
 		isSuccess
 	} = trpc.users.checkIfUserExists.useQuery({ email: email }, { enabled: email.includes('@') });
-	const { refetch } = trpc.users.all.useQuery({ department: 'isProgramming' });
-	const { mutate, isLoading, error } = trpc.users.addToDepartment.useMutation({
+	const { refetch } = trpc.users.all.useQuery({ department: 'isGuests' });
+	const { mutate, error } = trpc.users.addToDepartment.useMutation({
 		onSuccess: () => {
 			refetch();
 		}
@@ -24,7 +24,7 @@ export const AddToProgramming = () => {
 	const initialValues = {
 		email: '',
 		phoneNumber: '',
-		department: 'isProgramming' as Departments
+		department: 'isGuests' as Departments
 	};
 
 	useEffect(() => {
@@ -34,8 +34,8 @@ export const AddToProgramming = () => {
 	return (
 		<Modal
 			buttonLabel='Add Lead'
-			modalTitle='Add Lead to Programming'
-			modalDescription='This person will be added to the Programming department'
+			modalTitle='Add Lead'
+			modalDescription='This person will be added to the guests department.'
 			open={open}
 			setOpen={setOpen}
 		>
@@ -98,4 +98,4 @@ export const AddToProgramming = () => {
 	);
 };
 
-export default AddToProgramming;
+export default AddToGuests;

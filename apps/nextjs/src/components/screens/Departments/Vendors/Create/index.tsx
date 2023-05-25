@@ -33,9 +33,9 @@ export const AddToVendors = () => {
 
 	return (
 		<Modal
-			buttonLabel='Add Volunteer'
-			modalTitle='Add Volunteer to Vendors'
-			modalDescription='This volunteer will be added to the Programming department'
+			buttonLabel='Add Lead'
+			modalTitle='Add Lead to Vendors'
+			modalDescription='This person will be added to the Vendors'
 			open={open}
 			setOpen={setOpen}
 		>

@@ -19,13 +19,18 @@ const tagSelect = z.object({
 export const tagRouter = router({
   all: publicProcedure
     .input(tagSelect)
-    .query(({ ctx, input }) => ctx.prisma.tag.findMany({
-      where: {
-        OR: [
-          { type: { equals: input.type } },
-        ]
-      }
-    })),
+    .query(({ ctx, input }) => {
+
+      if (!input.type) return ctx.prisma.tag.findMany();
+
+      return ctx.prisma.tag.findMany({
+        where: {
+          OR: [
+            { type: { equals: input.type } },
+          ]
+        }
+      })
+    }),
   byId: publicProcedure
     .input(z.string())
     .query(({ ctx, input }) => ctx.prisma.tag.findFirst({ where: { id: input } })),
